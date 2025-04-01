@@ -1,0 +1,7 @@
+{
+    //"Url": "https://ultimateqa.com/simple-html-elements-for-automation/",
+    //"Url": "https://www.google.com/",
+    "Url": "https://www.saucedemo.com/",
+    "browser": "chrome",
+    "headlessMode": false
+}
