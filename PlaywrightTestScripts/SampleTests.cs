@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace PlaywrightTestScripts
 {
-    public class UnitTests : PageTest
+    public class SampleTests : PageTest
     {
 
         [Test]

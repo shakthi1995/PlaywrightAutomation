@@ -23,7 +23,8 @@ namespace PlaywrightTestScripts.Tests
             try
             {
                 LandingPage lPage = new LandingPage(_page);
-                await lPage.EnterAndSubmitUserDetails("standard_user", "secret_sauce");
+                await lPage.EnterAndSubmitUserDetails(Helper.Base64Decode(Settings.username), Helper.Base64Decode(Settings.password));
+                
                 await Assertions.Expect(_page).ToHaveTitleAsync("Swag Labs");
             }
             catch (Exception e)
@@ -39,7 +40,8 @@ namespace PlaywrightTestScripts.Tests
             try
             {
                 LandingPage lPage = new LandingPage(_page);
-                await lPage.EnterAndSubmitUserDetails("standard_user", "secret_sauce");
+                await lPage.EnterAndSubmitUserDetails(Helper.Base64Decode(Settings.username), Helper.Base64Decode(Settings.password));
+                
                 ProductsPage productsPage = new ProductsPage(_page);
                 await productsPage.BackpackAddToCartFunction();
                 await Assertions.Expect(_page.Locator(".shopping_cart_badge")).ToHaveTextAsync("1");
@@ -57,7 +59,8 @@ namespace PlaywrightTestScripts.Tests
             try
             {
                 LandingPage lPage = new LandingPage(_page);
-                await lPage.EnterAndSubmitUserDetails("standard_user", "secret_sauce");
+                await lPage.EnterAndSubmitUserDetails(Helper.Base64Decode(Settings.username), Helper.Base64Decode(Settings.password));
+                
                 ProductsPage productsPage = new ProductsPage(_page);
                 await productsPage.BackpackAddToCartFunction();
                 await productsPage.OpenCart();
@@ -70,8 +73,5 @@ namespace PlaywrightTestScripts.Tests
                 throw;
             }
         }
-
-
-
     }
 }

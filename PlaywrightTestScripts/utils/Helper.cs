@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Playwright;
+using NUnit.Framework.Internal;
 using PlaywrightTestScripts.Base;
 
 namespace PlaywrightTestScripts.utils
 {
-    public class Helper 
+    public class Helper
     {
         private readonly IPage page;
         public Helper(IPage page)
@@ -117,8 +118,32 @@ namespace PlaywrightTestScripts.utils
         public async Task NewWindow()
         {
             var context = await page.Context.NewPageAsync();
-            await context.CloseAsync();
+            //await context.CloseAsync();
 
+        }
+
+        /// <summary>
+        /// Encodes a string to Base64 format
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public static string Base64Encode(string text)
+        {
+            var textBytes = Encoding.UTF8.GetBytes(text);
+            Console.WriteLine(Convert.ToBase64String(textBytes));
+            return Convert.ToBase64String(textBytes);
+        }
+
+        /// <summary>
+        /// Decodes a Base64 encoded string back to its original format
+        /// </summary>
+        /// <param name="base64EncodedData"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public static string Base64Decode(string base64EncodedData)
+        {
+            var base64EncodedBytes = Convert.FromBase64String(base64EncodedData);
+            return Encoding.UTF8.GetString(base64EncodedBytes);
         }
     }
 }

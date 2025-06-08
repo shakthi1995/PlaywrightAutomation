@@ -1,7 +1,23 @@
 {
+    "env": "stage",
+
     //"Url": "https://ultimateqa.com/simple-html-elements-for-automation/",
     //"Url": "https://www.google.com/",
-    "Url": "https://www.saucedemo.com/",
+    //"Url": "https://www.saucedemo.com/",
+
+    "stageUrl": "https://www.saucedemo.com/",
+    "devUrl": "https://www.saucedemo.com/",
     "browser": "chrome",
-    "headlessMode": false
+    "headlessMode": false,
+
+    "userDetails": {
+        "standard_user": {
+            "username": "c3RhbmRhcmRfdXNlcg==",
+            "password": "c2VjcmV0X3NhdWNl"
+        },
+        "problem_user": {
+            "username": "cHJvYmxlbV91c2Vy",
+            "password": "c2VjcmV0X3NhdWNl"
+        }
+    }
 }
