@@ -12,7 +12,7 @@ namespace PlaywrightTestScripts.Tests
     [TestFixture]
     public class GoogleTest : TestBase
     {
-        //[TestCase(TestName = "Verify the user performs serach in google"), Parallelizable]
+        [TestCase(TestName = "Verify the user performs serach in google"), Parallelizable]
         public async Task GoogelSearch()
         {
             try
@@ -27,20 +27,11 @@ namespace PlaywrightTestScripts.Tests
             }
         }
 
-        //[TestCase(TestName = "Verify the user performs another search in google"), Parallelizable]
-        public async Task GoogelSearch2()
-        {
-            try
-            {
-                GoogleSearchPage lPage2 = new GoogleSearchPage(_page);
-                await lPage2.SearchFor("Playwright");
-            }
-            catch (Exception e)
-            {
-                //Log the exception in report and throw it
-                throw;
-            }
-        }
-
+        //[TestCase(TestName = "Converts the string to base64 encoded")]
+        //public void Base64Encode()
+        //{
+        //    var textBytes = Encoding.UTF8.GetBytes("123");
+        //    Console.WriteLine(Convert.ToBase64String(textBytes));
+        //}
     }
 }
