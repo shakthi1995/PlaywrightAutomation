@@ -126,11 +126,11 @@ namespace PlaywrightTestScripts.utils
         /// Encodes a string to Base64 format
         /// </summary>
         /// <returns></returns>
-        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentNullException"></exception>
+
         public static string Base64Encode(string text)
         {
             var textBytes = Encoding.UTF8.GetBytes(text);
-            Console.WriteLine(Convert.ToBase64String(textBytes));
             return Convert.ToBase64String(textBytes);
         }
 
