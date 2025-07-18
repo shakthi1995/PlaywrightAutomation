@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using AventStack.ExtentReports;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options; 
 using Microsoft.Playwright;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Newtonsoft.Json;
 using NUnit.Framework.Interfaces;
 using PlaywrightTestScripts.Model;
+using PlaywrightTestScripts.utils;
 
 namespace PlaywrightTestScripts.Base
 {
@@ -38,11 +41,20 @@ namespace PlaywrightTestScripts.Base
             }
         }
 
-        // Existing code...
-
         [OneTimeSetUp]
         public async static Task OneTimeSetup()
         {
+            // Initialize the Reporter and cleanup the old reports
+            var reportPath = Path.Combine(projectDirectory, "Report", $"TestReport_{DateTime.Now:yyyyMMdd_HHmmss}.html");
+            string testReportDir = Path.Combine(projectDirectory, "Report");
+            string testArchiveDir = Path.Combine(projectDirectory, "Archive");
+
+            Helper.CreateReportDirectory(testReportDir);
+            Helper.CreateReportDirectory(testArchiveDir);
+            Helper.MoveReportDirectory(testReportDir, testArchiveDir, true);
+
+            Reporter.SetupExtentReport("UI Regression Test", "Playwright Test Report", reportPath);
+
             // Initialize Playwright once for the whole test run
             _playwright = await Playwright.CreateAsync();
 
@@ -94,6 +106,7 @@ namespace PlaywrightTestScripts.Base
         [SetUp]
         public async Task Setup()
         {
+            Reporter.CreateTest(TestContext.CurrentContext.Test.Name);
             switch (Settings.browser)
             {
                 case "chrome":
@@ -158,23 +171,43 @@ namespace PlaywrightTestScripts.Base
 
             _page = await _context.NewPageAsync();
             await _page.SetViewportSizeAsync(1920, 1080);
+
             await _page.GotoAsync(Settings.url!); // Use null-forgiving operator since we validated it above
+            Reporter.LogToReport(Status.Pass, $"Navigated to {Settings.url} using {Settings.browser} browser in {((bool)Settings.headlessMode ? "headless" : "headed")} mode.");
         }
 
         [OneTimeTearDown]
         public static void OneTimeCleanup()
         {
-            
             _playwright?.Dispose();
+            Reporter.FlushReport();
         }
 
         [TearDown]
         public async Task TearDown()
         {
-            if(TestContext.CurrentContext.Result.Outcome.Status == TestStatus.Failed)
+            var testStatus = TestContext.CurrentContext.Result.Outcome.Status.ToString();
+
+            Status logStatus;
+
+            switch (testStatus)
             {
-                await CaptureScreenshot(TestContext.CurrentContext.Test.Name);
+                case "Passed":
+                    logStatus = Status.Pass;
+                    break;
+                case "Failed":
+                    logStatus = Status.Fail;
+                    Reporter.LogToReport(logStatus, $"Test failed: {TestContext.CurrentContext.Result.Message}");
+                    await CaptureScreenshot(TestContext.CurrentContext.Test.Name);
+                    break;
+                case "Skipped":
+                    logStatus = Status.Skip;
+                    break;
+                default:
+                    logStatus = Status.Info;
+                    break;
             }
+
             //Close the page and context after each test, so other tests have isolated resources
             if (_page != null)
             {
@@ -190,9 +223,6 @@ namespace PlaywrightTestScripts.Base
             {
                 await _browser.CloseAsync();
             }
-            //await _page.CloseAsync();
-            //await _context.CloseAsync();
-            //await _browser.CloseAsync();
         }
         public string Base64Encode(string text)
         {
@@ -203,12 +233,12 @@ namespace PlaywrightTestScripts.Base
         public string Base64Decode(string text) 
         {
             var bit = Convert.FromBase64String(text);
-            return Convert.ToBase64String(bit);
+            return Encoding.UTF8.GetString(bit);
         }
 
         public async Task CaptureScreenshot(string testName)
         {
-            string screenshotDir = "Screenshots";
+            string screenshotDir = Path.Combine(projectDirectory,"Screenshots");
             if (!Directory.Exists(screenshotDir))
             {
                 Directory.CreateDirectory(screenshotDir);
@@ -222,8 +252,7 @@ namespace PlaywrightTestScripts.Base
             });
 
             TestContext.AddTestAttachment(screenshotPath, "Screenshot for Failure");
+            Reporter.AddScreenshotToReport(screenshotPath);
         }
-
-
     }
 }

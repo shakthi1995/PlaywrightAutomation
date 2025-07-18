@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AventStack.ExtentReports;
 using Microsoft.Playwright;
 using NUnit.Framework.Interfaces;
 using PlaywrightTestScripts.Base;
@@ -26,6 +27,7 @@ namespace PlaywrightTestScripts.Tests
                 await lPage.EnterAndSubmitUserDetails(Helper.Base64Decode(Settings.username), Helper.Base64Decode(Settings.password));
                 
                 await Assertions.Expect(_page).ToHaveTitleAsync("Swag Labs");
+                Reporter.LogToReport(Status.Pass, "Standard user logged in successfully to sauce lab site");
             }
             catch (Exception e)
             {
@@ -41,10 +43,12 @@ namespace PlaywrightTestScripts.Tests
             {
                 LandingPage lPage = new LandingPage(_page);
                 await lPage.EnterAndSubmitUserDetails(Helper.Base64Decode(Settings.username), Helper.Base64Decode(Settings.password));
-                
+                Reporter.LogToReport(Status.Info, "Standard user logged in successfully to sauce lab site");
+
                 ProductsPage productsPage = new ProductsPage(_page);
                 await productsPage.BackpackAddToCartFunction();
                 await Assertions.Expect(_page.Locator(".shopping_cart_badge")).ToHaveTextAsync("1");
+                Reporter.LogToReport(Status.Pass, "Backpack added to cart successfully");
             }
             catch (Exception e)
             {
@@ -60,12 +64,16 @@ namespace PlaywrightTestScripts.Tests
             {
                 LandingPage lPage = new LandingPage(_page);
                 await lPage.EnterAndSubmitUserDetails(Helper.Base64Decode(Settings.username), Helper.Base64Decode(Settings.password));
-                
+                Reporter.LogToReport(Status.Info, "Standard user logged in successfully to sauce lab site");
+
                 ProductsPage productsPage = new ProductsPage(_page);
                 await productsPage.BackpackAddToCartFunction();
+                Reporter.LogToReport(Status.Info, "Backpack added to cart successfully");
+
                 await productsPage.OpenCart();
                 await Assertions.Expect(_page.Locator(".inventory_item_name")).ToBeVisibleAsync();
                 await Assertions.Expect(_page.Locator(".inventory_item_name")).ToHaveTextAsync("Sauce Labs Backpack");
+                Reporter.LogToReport(Status.Pass, "Backpack item is displayed in the cart page.");
             }
             catch (Exception e)
             {
