@@ -25,7 +25,6 @@ namespace PlaywrightTestScripts.Pages
         private ILocator SearchBox => _page.Locator("[name=q]");
         private ILocator SearchButton => _page.Locator("[name=btnK]").First;
 
-
         #endregion
 
         #region Methods
