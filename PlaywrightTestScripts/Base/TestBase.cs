@@ -41,23 +41,17 @@ namespace PlaywrightTestScripts.Base
             }
         }
 
-        // Existing code...
-
         [OneTimeSetUp]
         public async static Task OneTimeSetup()
         {
             // Initialize the Reporter and cleanup the old reports
-
-            //var dir = Path.Combine(projectDirectory, "Reports", "Ex");
             var reportPath = Path.Combine(projectDirectory, "Report", $"TestReport_{DateTime.Now:yyyyMMdd_HHmmss}.html");
             string testReportDir = Path.Combine(projectDirectory, "Report");
             string testArchiveDir = Path.Combine(projectDirectory, "Archive");
 
             Helper.CreateReportDirectory(testReportDir);
             Helper.CreateReportDirectory(testArchiveDir);
-
             Helper.MoveReportDirectory(testReportDir, testArchiveDir, true);
-            //Helper.CreateReportDirectory(dir);
 
             Reporter.SetupExtentReport("UI Regression Test", "Playwright Test Report", reportPath);
 
@@ -107,8 +101,6 @@ namespace PlaywrightTestScripts.Base
                     Settings.password = _userDetails.standard_user.password;
                     break;
             }
-
-            
         }
 
         [SetUp]
@@ -207,8 +199,6 @@ namespace PlaywrightTestScripts.Base
                     logStatus = Status.Fail;
                     Reporter.LogToReport(logStatus, $"Test failed: {TestContext.CurrentContext.Result.Message}");
                     await CaptureScreenshot(TestContext.CurrentContext.Test.Name);
-                    //string screenshotPath = Path.Combine("Screenshots", $"{TestContext.CurrentContext.Test.Name}_{DateTime.Now:yyyyMMdd_HHmmss)}.png");
-                    //Reporter.AddScreenshotToReport(screenshotPath);
                     break;
                 case "Skipped":
                     logStatus = Status.Skip;
@@ -217,13 +207,6 @@ namespace PlaywrightTestScripts.Base
                     logStatus = Status.Info;
                     break;
             }
-
-            //if (TestContext.CurrentContext.Result.Outcome.Status == TestStatus.Failed)
-            //{
-            //    await CaptureScreenshot(TestContext.CurrentContext.Test.Name);
-            //    string screenshotPath = Path.Combine("Screenshots", $"{TestContext.CurrentContext.Test.Name}_{DateTime.Now:yyyyMMdd_HHmmss)}.png");
-            //    Reporter.AddScreenshotToReport(screenshotPath);
-            //}
 
             //Close the page and context after each test, so other tests have isolated resources
             if (_page != null)
@@ -240,9 +223,6 @@ namespace PlaywrightTestScripts.Base
             {
                 await _browser.CloseAsync();
             }
-            //await _page.CloseAsync();
-            //await _context.CloseAsync();
-            //await _browser.CloseAsync();
         }
         public string Base64Encode(string text)
         {
@@ -274,7 +254,5 @@ namespace PlaywrightTestScripts.Base
             TestContext.AddTestAttachment(screenshotPath, "Screenshot for Failure");
             Reporter.AddScreenshotToReport(screenshotPath);
         }
-
-
     }
 }
