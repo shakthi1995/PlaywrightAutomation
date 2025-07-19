@@ -18,6 +18,7 @@ namespace PlaywrightTestScripts.Tests
     [TestFixture]
     public class UITest : TestBase
     {
+
         [TestCase(TestName = "Verify the standard user logs into sauce demo"), Parallelizable]
         public async Task StandardUserlogin()
         {
@@ -41,9 +42,7 @@ namespace PlaywrightTestScripts.Tests
         {
             try
             {
-                LandingPage lPage = new LandingPage(_page);
-                await lPage.EnterAndSubmitUserDetails(Helper.Base64Decode(Settings.username), Helper.Base64Decode(Settings.password));
-                Reporter.LogToReport(Status.Info, "Standard user logged in successfully to sauce lab site");
+                await StandardUserlogin();
 
                 ProductsPage productsPage = new ProductsPage(_page);
                 await productsPage.BackpackAddToCartFunction();
@@ -62,14 +61,9 @@ namespace PlaywrightTestScripts.Tests
         {
             try
             {
-                LandingPage lPage = new LandingPage(_page);
-                await lPage.EnterAndSubmitUserDetails(Helper.Base64Decode(Settings.username), Helper.Base64Decode(Settings.password));
-                Reporter.LogToReport(Status.Info, "Standard user logged in successfully to sauce lab site");
+                await AddProductToCart();
 
                 ProductsPage productsPage = new ProductsPage(_page);
-                await productsPage.BackpackAddToCartFunction();
-                Reporter.LogToReport(Status.Info, "Backpack added to cart successfully");
-
                 await productsPage.OpenCart();
                 await Assertions.Expect(_page.Locator(".inventory_item_name")).ToBeVisibleAsync();
                 await Assertions.Expect(_page.Locator(".inventory_item_name")).ToHaveTextAsync("Sauce Labs Backpack");
