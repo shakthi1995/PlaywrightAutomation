@@ -113,6 +113,7 @@ namespace PlaywrightTestScripts.Base
                     _browser = await _playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
                     {
                         Headless = Settings.headlessMode,
+                        SlowMo = 1000,
                         Args = new[] {
                                         "--disable-features=PasswordLeakDetection", // Disable password leak popup
                                         "--disable-save-password-bubble" // Disable password manager prompts
@@ -124,6 +125,7 @@ namespace PlaywrightTestScripts.Base
                     _browser = await _playwright.Firefox.LaunchAsync(new BrowserTypeLaunchOptions
                     {
                         Headless = Settings.headlessMode,
+                        SlowMo = 1000,
                         Args = new[] {
                                         "--disable-features=PasswordLeakDetection", // Disable password leak popup
                                         "--disable-save-password-bubble" // Disable password manager prompts
@@ -135,6 +137,7 @@ namespace PlaywrightTestScripts.Base
                     _browser = await _playwright.Webkit.LaunchAsync(new BrowserTypeLaunchOptions
                     {
                         Headless = Settings.headlessMode,
+                        SlowMo = 1000,
                         Args = new[] {
                                         "--disable-features=PasswordLeakDetection", // Disable password leak popup
                                         "--disable-save-password-bubble" // Disable password manager prompts
@@ -146,6 +149,7 @@ namespace PlaywrightTestScripts.Base
                     _browser = await _playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
                     {
                         Headless = Settings.headlessMode,
+                        SlowMo = 1000,
                         Args = new[] {
                                         "--disable-features=PasswordLeakDetection", // Disable password leak popup
                                         "--disable-save-password-bubble" // Disable password manager prompts
